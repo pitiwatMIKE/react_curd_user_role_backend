@@ -3,6 +3,8 @@ const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 const app = express();
 const productRouter = require("./routes/productRouter");
 
+app.use(express.json())
+
 app.get("/", (req, res) => {
   res.send("server is runing ....");
 });
