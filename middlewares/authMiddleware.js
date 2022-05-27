@@ -30,4 +30,17 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports = { protect };
+const permit = (...permittedRoles) => {
+  return (req, res, next) => {
+    const { user } = req;
+
+    if (user && permittedRoles.includes(user.role)) {
+      next();
+    } else {
+      res.status(403);
+      throw new Error("Forbiden");
+    }
+  };
+};
+
+module.exports = { protect, permit };

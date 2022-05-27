@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     async comparePassword(passwordInput) {
       return await bcrypt.compare(passwordInput, this.password);
     }
-    
+
     static associate(models) {
       // define association here
     }
@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: { isEmail: { arg: true, msg: "Invalid Email" } },
       },
       password: DataTypes.STRING,
+      role: DataTypes.STRING,
     },
     {
       sequelize,

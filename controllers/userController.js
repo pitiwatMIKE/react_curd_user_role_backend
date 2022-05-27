@@ -4,7 +4,7 @@ const generateToken = require("../utils/generateToken");
 
 // @desc Get All users
 // @route GET /api/users
-// @acess public
+// @access protecd amdin
 const getUsers = asyncHandler(async (req, res) => {
   const users = await User.findAll();
   if (users) {
@@ -15,14 +15,14 @@ const getUsers = asyncHandler(async (req, res) => {
   }
 });
 
-// // @desc Update user
-// // @route PUT /api/users/:id/update
-// // @access public
-// const updateUser = asyncHandler(async (req, res) => {
-//   const user = await User.findByPk(req.params.id);
-//   const updateUser = await user.update({ ...req.body });
-//   res.json(updateUser);
-// });
+// @desc Update user
+// @route PUT /api/users/:id/update
+// @access protect admin
+const updateUser = asyncHandler(async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+  const updateUser = await user.update({ ...req.body });
+  res.json(updateUser);
+});
 
 // @desc Register
 // @route POST /api/users/register
@@ -45,7 +45,7 @@ const register = asyncHandler(async (req, res) => {
 
 // @desc login
 // @route POST /api/users/login
-// @access private
+// @access protect
 const login = asyncHandler(async (req, res) => {
   const { password, email } = req.body;
   const user = await User.findOne({
@@ -69,4 +69,4 @@ const login = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getUsers, register, login };
+module.exports = { getUsers, updateUser, register, login };

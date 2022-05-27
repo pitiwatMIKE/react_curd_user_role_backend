@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { protect } = require("../middlewares/authMiddleware");
+const { protect, permit } = require("../middlewares/authMiddleware");
 const {
   getProducts,
   getProduct,
@@ -8,6 +8,7 @@ const {
   createProduct,
   updateProduct,
 } = require("../controllers/productController");
+const { USER, ADMIN } = require("../constants/roleConstants");
 
 router.get("/products", (req, res) => {
   res.send("get all products");
@@ -15,8 +16,8 @@ router.get("/products", (req, res) => {
 
 router.route("/").get(getProducts);
 router.route("/:id").get(getProduct);
-router.route("/create").post(protect, createProduct);
-router.route("/:id/update").put(protect, updateProduct);
-router.route("/:id/delete").delete(protect, deleteProduct);
+router.route("/create").post(protect, permit(USER, ADMIN), createProduct);
+router.route("/:id/update").put(protect, permit(USER, ADMIN), updateProduct);
+router.route("/:id/delete").delete(protect, permit(USER, ADMIN), deleteProduct);
 
 module.exports = router;
