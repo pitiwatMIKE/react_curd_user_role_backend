@@ -2,15 +2,17 @@ const express = require("express");
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 const app = express();
 const productRouter = require("./routes/productRouter");
+const userRouter = require("./routes/userRouter");
 
-app.use(express.json())
+require("dotenv").config();
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("server is runing ....");
 });
 
 app.use("/api/products", productRouter);
-
+app.use("/api/users", userRouter);
 // Error Handle
 app.use(notFound);
 app.use(errorHandler);
