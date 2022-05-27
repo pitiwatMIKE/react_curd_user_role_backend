@@ -16,6 +16,12 @@ const protect = asyncHandler(async (req, res, next) => {
         where: { id: decode.id },
         attributes: { exclude: ["password"] },
       });
+
+      if (req.user == null) {
+        res.status(401);
+        throw new Error("Not authorized, not found user");
+      }
+
       next();
     } catch (err) {
       console.log(err);

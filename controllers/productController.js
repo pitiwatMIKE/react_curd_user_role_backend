@@ -34,7 +34,7 @@ const getProduct = asyncHandler(async (req, res) => {
 // @route POST /api/product/create
 // @access public
 const createProduct = asyncHandler(async (req, res) => {
-  const product = await Product.create(req.body);
+  const product = await Product.create({ ...req.body, userId: req.user.id });
   res.json(product);
 });
 

@@ -24,6 +24,21 @@ const updateUser = asyncHandler(async (req, res) => {
   res.json(updateUser);
 });
 
+// @desc Delete user
+// @route DELTE /api/users/:id/delete
+// @access protect admin
+const deleteUser = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const deleteUser = await User.destroy({ where: { id } });
+
+  if (deleteUser) {
+    res.json(`Delete User id: ${id} success`);
+  } else {
+    res.status(404);
+    throw new Error(`Not found user id:${id}`);
+  }
+});
+
 // @desc Register
 // @route POST /api/users/register
 // @access public
@@ -69,4 +84,4 @@ const login = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { getUsers, updateUser, register, login };
+module.exports = { getUsers, updateUser, deleteUser, register, login };
