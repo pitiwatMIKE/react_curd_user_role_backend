@@ -5,19 +5,31 @@ const {
   getProducts,
   getProduct,
   deleteProduct,
-  createProduct,
+  createMyProduct,
   updateProduct,
+  getMyProducts,
+  updateMyProduct,
+  deleteMyProduct,
+  getUserProducts,
 } = require("../controllers/productController");
 const { USER, ADMIN } = require("../constants/roleConstants");
 
-router.get("/products", (req, res) => {
-  res.send("get all products");
-});
-
 router.route("/").get(getProducts);
+router.route("/myproducts").get(protect, permit(USER, ADMIN), getMyProducts);
 router.route("/:id").get(getProduct);
-router.route("/create").post(protect, permit(USER, ADMIN), createProduct);
-router.route("/:id/update").put(protect, permit(USER, ADMIN), updateProduct);
-router.route("/:id/delete").delete(protect, permit(USER, ADMIN), deleteProduct);
+router.route("/create").post(protect, permit(USER, ADMIN), createMyProduct);
+router
+  .route("/:id/updatemyproduct")
+  .put(protect, permit(USER, ADMIN), updateMyProduct);
+router
+  .route("/:id/deletemyproduct")
+  .delete(protect, permit(USER, ADMIN), deleteMyProduct);
+
+// for admin
+router
+  .route("/:userid/getuserproducts")
+  .get(protect, permit(ADMIN), getUserProducts);
+router.route("/:id/update").put(protect, permit(ADMIN), updateProduct);
+router.route("/:id/delete").delete(protect, permit(ADMIN), deleteProduct);
 
 module.exports = router;

@@ -2,26 +2,10 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-     */
-
     await queryInterface.bulkInsert("Products", products, {});
   },
 
   async down(queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
     await queryInterface.bulkDelete("Products", null, {});
   },
 };
@@ -32,6 +16,7 @@ const products = [...Array(20).keys()].map((i) => ({
   price: 250,
   qty: 25,
   image: "/upload/example.png",
+  userId: i > 10 ? 2 : 1,
   createdAt: new Date(),
   updatedAt: new Date(),
 }));

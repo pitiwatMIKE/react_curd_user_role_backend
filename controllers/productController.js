@@ -1,7 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const { Product } = require("../models");
+const user = require("../models/user");
 
-// @desc Get All Product
+// @desc Get All Products
 // @route GET /api/products
 // @access public
 const getProducts = asyncHandler(async (req, res, next) => {
@@ -9,6 +10,20 @@ const getProducts = asyncHandler(async (req, res, next) => {
 
   if (products) {
     res.json(products);
+  } else {
+    res.status(404);
+    throw new Error("Products not found");
+  }
+});
+
+// @desc get my Products
+// @route GET /api/products/myproducts
+// @access protect
+const getMyProducts = asyncHandler(async (req, res) => {
+  let myProducts = await Product.findAll({ where: { userId: req.user.id } });
+
+  if (myProducts) {
+    res.json(myProducts);
   } else {
     res.status(404);
     throw new Error("Products not found");
@@ -30,17 +45,59 @@ const getProduct = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Create Product
+// @desc Create my Product
 // @route POST /api/product/create
-// @access public
-const createProduct = asyncHandler(async (req, res) => {
+// @access protect
+const createMyProduct = asyncHandler(async (req, res) => {
   const product = await Product.create({ ...req.body, userId: req.user.id });
   res.json(product);
 });
 
+// @desc Update my Product
+// @route PUT /api/product/:id/updatemyproduct
+// @access protect
+const updateMyProduct = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const product = await Product.findOne({ where: { id, userId: req.user.id } });
+
+  if (!product) {
+    res.status(404);
+    throw new Error("Product Not Found");
+  } else {
+    const updateProduct = await product.update({ ...req.body });
+    res.json(updateProduct);
+  }
+});
+
+// @desc Delete My Product
+// @route DELETE /api/products/:id/deletemyproducts
+// @acess protect
+const deleteMyProduct = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const deleteProduct = await Product.destroy({
+    where: { id, userId: req.user.id },
+  });
+  if (deleteProduct) {
+    res.json(`Delete Product id:${id} success`);
+  } else {
+    res.status(404);
+    throw new Error(`Product id:${id} Not Found`);
+  }
+});
+
+// @desc get products of each user
+// @route GET /api/products/:userid/userproducts
+// @access protect admin
+const getUserProducts = asyncHandler(async (req, res) => {
+  const products = await Product.findAll({
+    where: { userId: req.params.userid },
+  });
+  res.json(products);
+});
+
 // @desc Update Product
 // @route PUT /api/product/:id/update
-// @access public
+// @access protect admin
 const updateProduct = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const product = await Product.findByPk(id);
@@ -50,7 +107,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 
 // @desc Delete Product
 // @route DELETE /api/products/:id/delete
-// @acess public
+// @acess protect admin
 const deleteProduct = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const deleteProduct = await Product.destroy({ where: { id: id } });
@@ -66,6 +123,11 @@ module.exports = {
   getProducts,
   getProduct,
   deleteProduct,
-  createProduct,
+  createMyProduct,
   updateProduct,
+  getMyProducts,
+  updateProduct,
+  updateMyProduct,
+  deleteMyProduct,
+  getUserProducts,
 };
