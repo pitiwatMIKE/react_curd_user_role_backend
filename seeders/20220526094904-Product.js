@@ -15,7 +15,7 @@ const products = [...Array(20).keys()].map((i) => ({
   desc: "this is server it can detect Objects",
   price: 250,
   qty: 25,
-  image: "/upload/example.png",
+  image: "/static/images/example.jpg",
   userId: i > 10 ? 2 : 1,
   createdAt: new Date(),
   updatedAt: new Date(),
