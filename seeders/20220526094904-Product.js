@@ -10,7 +10,7 @@ module.exports = {
   },
 };
 
-const products = [...Array(20).keys()].map((i) => ({
+const products = [...Array(50).keys()].map((i) => ({
   name: `name${i}`,
   desc: "this is server it can detect Objects",
   price: 250,
