@@ -75,7 +75,7 @@ const login = asyncHandler(async (req, res) => {
         token: generateToken(user.id),
       });
     } else {
-      res.status(400);
+      res.status(422);
       throw new Error("Invalid Password");
     }
   } else {
