@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   Product.init(
     {
       name: { type: DataTypes.STRING, allowNull: false },
-      desc: { type: DataTypes.STRING, allowNull: false },
+      desc: { type: DataTypes.TEXT, allowNull: false },
       price: { type: DataTypes.INTEGER, allowNull: false },
       qty: { type: DataTypes.INTEGER, allowNull: false },
       image: { type: DataTypes.STRING, allowNull: false },
