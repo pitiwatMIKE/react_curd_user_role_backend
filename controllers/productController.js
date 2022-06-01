@@ -28,10 +28,21 @@ const getProducts = asyncHandler(async (req, res) => {
 // @route GET /api/products/myproducts
 // @access protect
 const getMyProducts = asyncHandler(async (req, res) => {
-  let myProducts = await Product.findAll({ where: { userId: req.user.id } });
+  let pageSize = 5;
+  let page = req.query.page || 1;
+  let condition = { userId: req.user.id };
+
+  let { rows, count } = await Product.findAndCountAll({
+    where: condition,
+    offset: pageSize * (page - 1),
+    limit: pageSize,
+  });
+
+  maxPage = Math.ceil(count / pageSize);
+  let myProducts = rows;
 
   if (myProducts) {
-    res.json(myProducts);
+    res.json({ myProducts, maxPage });
   } else {
     res.status(404);
     throw new Error("Products not found");
