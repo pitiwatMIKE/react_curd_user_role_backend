@@ -9,6 +9,7 @@ const getProducts = asyncHandler(async (req, res) => {
   let condition = keyword ? { name: { [Op.substring]: keyword } } : {};
 
   let { rows, count } = await Product.findAndCountAll({
+    order: [["updatedAt", "DESC"]],
     where: condition,
     offset: pageSize * (page - 1),
     limit: pageSize,
@@ -33,6 +34,7 @@ const getMyProducts = asyncHandler(async (req, res) => {
   let condition = { userId: req.user.id };
 
   let { rows, count } = await Product.findAndCountAll({
+    order: [["updatedAt", "DESC"]],
     where: condition,
     offset: pageSize * (page - 1),
     limit: pageSize,
