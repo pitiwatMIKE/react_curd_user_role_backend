@@ -1,11 +1,13 @@
 const express = require("express");
 const path = require("path");
+const morgan = require("morgan")
 const { notFound, errorHandler } = require("./middlewares/errorMiddleware");
 const app = express();
 const productRouter = require("./routes/productRouter");
 const userRouter = require("./routes/userRouter");
 
 require("dotenv").config();
+app.use(morgan('tiny'))
 app.use(express.json());
 
 app.use("/static", express.static(path.join(__dirname, "public")));
