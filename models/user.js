@@ -32,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
             let hash = await bcrypt.hashSync(user.password, salt);
             user.password = hash;
           }
+          if (user.password === "") {
+            const getUser = await User.findByPk(user.id);
+            user.password = getUser.password;
+          }
         },
       },
     }
