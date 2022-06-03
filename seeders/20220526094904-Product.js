@@ -17,7 +17,7 @@ Alias incidunt blanditiis minus laborum facilis accusamus. Pariatur quis culpa c
 Sit perspiciatis et omnis molestiae omnis. Non officiis tempora earum dolorum quae id accusamus maiores beatae. Ipsam voluptatem id qui illum.`;
 
 const products = [...Array(50).keys()].map((i) => ({
-  name: `name${i}`,
+  name: `Product ${i + 1}`,
   desc: desc,
   price: 250,
   qty: 25,

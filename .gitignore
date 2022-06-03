@@ -2,3 +2,4 @@
 .env
 config.json
 public/images/*
+!example.jpg
