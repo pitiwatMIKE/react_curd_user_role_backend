@@ -110,10 +110,26 @@ const deleteMyProduct = asyncHandler(async (req, res) => {
 // @route GET /api/products/:userid/userproducts
 // @access protect admin
 const getUserProducts = asyncHandler(async (req, res) => {
-  const products = await Product.findAll({
-    where: { userId: req.params.userid },
+  let pageSize = 5;
+  let page = req.query.page || 1;
+  let condition = { userId: req.params.userid };
+
+  let { rows, count } = await Product.findAndCountAll({
+    order: [["updatedAt", "DESC"]],
+    where: condition,
+    offset: pageSize * (page - 1),
+    limit: pageSize,
   });
-  res.json(products);
+
+  maxPage = Math.ceil(count / pageSize);
+  let userProducts = rows;
+
+  if (userProducts) {
+    res.json({ userProducts, maxPage });
+  } else {
+    res.status(404);
+    throw new Error("Products not found");
+  }
 });
 
 // @desc Update Product
