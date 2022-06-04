@@ -10,6 +10,7 @@ require("dotenv").config();
 app.use(morgan("tiny"));
 app.use(express.json());
 
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 app.use("/static", express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
