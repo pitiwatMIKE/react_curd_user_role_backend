@@ -10,24 +10,32 @@ require("dotenv").config();
 app.use(morgan("tiny"));
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, "../frontend/build")));
-app.use("/static", express.static(path.join(__dirname, "public")));
+//route
+app.use("/api/products", productRouter);
+app.use("/api/users", userRouter);
 
-app.get("/", (req, res) => {
-  res.send("server is runing ....");
-});
-
+// db:migrate adn db:seed
 app.get("/reset/db/table", async (req, res) => {
   try {
     await require("./resetTable")();
     res.send("reset table success");
   } catch (e) {
-    throw new Error(e);
+    res.status(500);
+    console.log(e);
   }
 });
 
-app.use("/api/products", productRouter);
-app.use("/api/users", userRouter);
+// static file
+app.use("/static", express.static(path.join(__dirname, "public")));
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/build")));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "../frontend", "build", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => res.send("server is running...."));
+}
 
 // Error Handle
 app.use(notFound);
