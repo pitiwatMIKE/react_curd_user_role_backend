@@ -29,9 +29,9 @@ app.get("/reset/db/table", async (req, res) => {
 app.use("/static", express.static(path.join(__dirname, "public")));
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/build")));
+  app.use(express.static(path.join(__dirname, "build")));
   app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname, "../frontend", "build", "index.html"))
+    res.sendFile(path.resolve(__dirname, "build", "index.html"))
   );
 } else {
   app.get("/", (req, res) => res.send("server is running...."));
